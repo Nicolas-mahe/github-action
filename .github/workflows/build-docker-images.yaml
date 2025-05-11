@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'app/**'
-    #   - 'Dockerfile'
+    paths:
+      - 'docker/**'
+      - 'Dockerfile'
+      - 'requirements.txt'
 
 jobs:
   build:
@@ -15,6 +16,10 @@ jobs:
     permissions:
       contents: read
       packages: write
+
+    env:
+      OWNER: ${{ github.repository_owner }}
+      OWNER_LOWER: ${{ toLower(github.repository_owner) }}
 
     steps:
       - name: Checkout code
@@ -36,5 +41,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner | toLower }}/your-image-name:latest
-            ghcr.io/${{ github.repository_owner | toLower }}/your-image-name:${{ github.sha }}
+            ghcr.io/${{ env.OWNER_LOWER }}/your-image-name:latest
+            ghcr.io/${{ env.OWNER_LOWER }}/your-image-name:${{ github.sha }}

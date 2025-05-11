@@ -8,7 +8,7 @@ WORKDIR /app
 COPY ./app .
 
 # Set environment(s) variable(s)
-ENV DOCKERCONTAINERMANAGER_SECRET_KEY="CHANGEME"
+ENV DEBUG="True"
 
 # Install python dependencies
 RUN pip install -r requirements.txt

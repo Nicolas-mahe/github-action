@@ -5,7 +5,6 @@ app = Flask(__name__)
 app.secret_key = os.getenv('DOCKERCONTAINERMANAGER_SECRET_KEY')
 if not app.secret_key:
     raise ValueError("PAS DE CLE SECRETE. Veuillez ajouter DOCKERCONTAINERMANAGER_SECRET_KEY dans votre .env")
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 @app.route('/')
 def index():

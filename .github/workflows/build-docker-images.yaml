@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'docker/**'
-      - 'Dockerfile'
-      - 'requirements.txt'
+    # paths:
+    #   - 'docker/**'
+    #   - 'Dockerfile'
 
 jobs:
   build:

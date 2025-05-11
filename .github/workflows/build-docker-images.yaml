@@ -41,5 +41,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ env.owner_lower }}/your-image-name:latest
-            ghcr.io/${{ env.owner_lower }}/your-image-name:${{ github.sha }}
+            ghcr.io/${{ env.owner_lower }}/github-action-test:latest
+            ghcr.io/${{ env.owner_lower }}/github-action-test:${{ github.sha }}

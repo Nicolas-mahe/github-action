@@ -36,5 +36,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/github-action-test:latest
-            ghcr.io/${{ github.repository_owner }}/github-action-test:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner | toLower }}/your-image-name:latest
+            ghcr.io/${{ github.repository_owner | toLower }}/your-image-name:${{ github.sha }}

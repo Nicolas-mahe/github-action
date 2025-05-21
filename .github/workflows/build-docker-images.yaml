@@ -11,7 +11,7 @@ on:
     inputs:
       version:
         description: 'Version number to tag (git and docker image)'
-        required: true
+        required: false
         type: string
 
 jobs:

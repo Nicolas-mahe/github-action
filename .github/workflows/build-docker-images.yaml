@@ -30,9 +30,9 @@ jobs:
         run: |
           echo "IMAGE_LOWER=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           echo "BRANCH_NAME=$(echo '${{ github.ref }}' | sed 's|refs/[^/]*/||g' | tr '/' '-')" >> $GITHUB_ENV
-          echo "VERSION=${{ github.event.inputs.version || 'latest' }}" >> $GITHUB_ENV
 
       - name: Check if tag exists on remote
+        if: github.event.inputs.version != ''
         run: |
           if git ls-remote --tags origin "${{ github.event.inputs.version }}" | grep -q "${{ github.event.inputs.version }}"; then
             echo "Tag ${{ github.event.inputs.version }} already exists on the remote."

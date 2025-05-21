@@ -32,6 +32,14 @@ jobs:
           echo "BRANCH_NAME=$(echo '${{ github.ref }}' | sed 's|refs/[^/]*/||g' | tr '/' '-')" >> $GITHUB_ENV
           echo "VERSION=${{ github.event.inputs.version || 'latest' }}" >> $GITHUB_ENV
 
+      - name: Check if tag exists, if yes exit workflow
+        if: github.event.inputs.version != ''
+        run: |
+          if git rev-parse "${{ github.event.inputs.version }}" >/dev/null 2>&1; then
+            echo "::error::Tag ${{ github.event.inputs.version }} already exists"
+            exit 1
+          fi
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:

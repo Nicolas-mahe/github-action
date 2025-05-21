@@ -32,13 +32,20 @@ jobs:
           echo "BRANCH_NAME=$(echo '${{ github.ref }}' | sed 's|refs/[^/]*/||g' | tr '/' '-')" >> $GITHUB_ENV
           echo "VERSION=${{ github.event.inputs.version || 'latest' }}" >> $GITHUB_ENV
 
-      - name: Check if tag exists, if yes exit workflow
+      - name: Check if tag exists on remote
+        run: |
+          if git ls-remote --tags origin "${{ github.event.inputs.version }}" | grep -q "${{ github.event.inputs.version }}"; then
+            echo "Tag ${{ github.event.inputs.version }} already exists on the remote."
+            exit 0
+          fi
+      
+      - name: Create and push Git tag
         if: github.event.inputs.version != ''
         run: |
-          if git rev-parse "${{ github.event.inputs.version }}" >/dev/null 2>&1; then
-            echo "::error::Tag ${{ github.event.inputs.version }} already exists"
-            exit 1
-          fi
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions@github.com'
+          git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
+          git push origin "${{ github.event.inputs.version }}"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -60,11 +67,3 @@ jobs:
             ghcr.io/${{ env.IMAGE_LOWER }}:${{ env.BRANCH_NAME }}
             ghcr.io/${{ env.IMAGE_LOWER }}:${{ github.sha }}
             ${{ github.event.inputs.version && format('ghcr.io/{0}:{1}', env.IMAGE_LOWER, github.event.inputs.version) || '' }}
-
-      - name: Create and push Git tag
-        if: github.event.inputs.version != ''
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions@github.com'
-          git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
-          git push origin "${{ github.event.inputs.version }}"

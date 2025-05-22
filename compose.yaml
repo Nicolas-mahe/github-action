@@ -1,0 +1,21 @@
+services:
+  python:
+    restart: unless-stopped
+    image: ghcr.io/nicolas-mahe/github-action:${DOCKER_TAG:-latest}
+    container_name: github-action
+    hostname: github-action 
+    environment:
+      PUID: 1000
+      PGID: 100
+      TZ: Europe/Paris
+      DOCKERCONTAINERMANAGER_SECRET_KEY: ${DOCKERCONTAINERMANAGER_SECRET_KEY}
+    ports:
+      - 5200:5000
+    volumes:
+      - /${DOCKER_DATA_DIRECTORY:?data path is required}/repos/home-docker/timezone:/etc/timezone:ro
+    networks:
+      - webinternal
+
+networks:
+  webinternal:
+    external: true
